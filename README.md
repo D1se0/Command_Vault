@@ -87,19 +87,15 @@ run.bat
 
 command-vault/
 
+```
 │
-
 ├─ client/
-
 ├─ server/
-
 ├─ node/
-
 │ └─ node.msi
-
 ├─ run.bat
-
 ├─ install.bat
+```
 
 4. **Haz doble click en `install.bat`**
 5. **Despues de instalar las dependencias haz doble click en `run.bat`**
