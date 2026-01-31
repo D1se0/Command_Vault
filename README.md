@@ -21,6 +21,16 @@ Cuando la base de datos alcance un volumen sólido y útil de comandos reales, s
 
 ---
 
+## 🖼️ Capturas del proyecto
+
+<img width="1919" height="783" alt="1" src="https://github.com/user-attachments/assets/07669430-988e-4dbb-aec2-d97e6300f673" />
+<img width="936" height="534" alt="2" src="https://github.com/user-attachments/assets/23b29952-5994-4a53-811b-437af1d08c16" />
+<img width="819" height="632" alt="3" src="https://github.com/user-attachments/assets/002e7917-e150-41ef-a2d7-3907ad1af9c6" />
+<img width="798" height="277" alt="4" src="https://github.com/user-attachments/assets/62b78dc3-6d5a-49e2-9e95-136d7804b7f9" />
+<img width="805" height="602" alt="5" src="https://github.com/user-attachments/assets/2fc8f9bf-0919-4236-9cd0-a86a6b3b8912" />
+
+---
+
 ## ✨ Características
 
 - 📂 Workspaces → Secciones → Comandos
