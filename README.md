@@ -19,6 +19,8 @@ El código se encuentra publicado para facilitar aportaciones, mejoras y feedbac
 Paralelamente, el proyecto está en desarrollo activo y se irán incorporando nuevos comandos de forma progresiva.
 Cuando la base de datos alcance un volumen sólido y útil de comandos reales, se publicará una nueva release en GitHub con una Command Database mucho más amplia y madura.
 
+Documentación en GitBook: [GitBook Documentación](https://dise0.gitbook.io/h4cker_b00k/proyectos/command-vault-beta)
+
 ---
 
 ## 🖼️ Capturas del proyecto
