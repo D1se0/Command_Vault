@@ -86,12 +86,19 @@ run.bat
 3. Dentro verás algo como:
 
 command-vault/
+
 │
+
 ├─ client/
+
 ├─ server/
+
 ├─ node/
+
 │ └─ node.msi
+
 ├─ run.bat
+
 ├─ install.bat
 
 4. **Haz doble click en `install.bat`**
