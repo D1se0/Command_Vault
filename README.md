@@ -85,9 +85,8 @@ run.bat
 2. **Descomprímelo** en cualquier carpeta
 3. Dentro verás algo como:
 
-command-vault/
-
 ```
+command-vault/
 │
 ├─ client/
 ├─ server/
