@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  command-vault:
+    image: node:20.20.0-bullseye
+    container_name: command-vault
+    restart: unless-stopped
+
+    working_dir: /app
+
+    environment:
+      NODE_ENV: development
+      DB_PATH: /app/server/data/command-vault.db
+
+    ports:
+      - "600:5173"   # Frontend (Vite)
+      - "5179:5179"  # Backend API
+
+    volumes:
+      # Código fuente (persistente)
+      - /opt/command-vault/server:/app/server
+      - /opt/command-vault/client:/app/client
+      - /opt/command-vault/package.json:/app/package.json
+      - /opt/command-vault/package-lock.json:/app/package-lock.json
+
+      # Base de datos persistente
+      - /opt/command-vault/server/data:/app/server/data
+
+    command: >
+      sh -c "
+        npm install &&
+        npm run dev
+      "
