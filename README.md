@@ -156,6 +156,154 @@ Una vez abierto el navegador:
 
 ---
 
+## 🚀 Despliegue en Linux / Raspberry Pi (Docker + Portainer)
+
+Command Vault puede ejecutarse fácilmente en Linux y especialmente en Raspberry Pi (recomendado 4 / 8 GB RAM) utilizando Docker y Portainer, manteniendo persistentes tanto la base de datos como el código fuente.
+
+Este método permite:
+
+- Ejecución local vía navegador
+- Persistencia de datos (`.db`)
+- Reinicio automático del servicio
+- Desarrollo activo sin recompilar imágenes
+
+---
+
+## 📋 Requisitos previos
+
+- Raspberry Pi 4 (4 GB mínimo, 8 GB recomendado) o cualquier Linux x64
+- Sistema operativo basado en Debian (Raspberry Pi OS, Ubuntu, etc.)
+- Docker instalado
+- Portainer instalado y funcionando
+- Acceso a la carpeta `/opt`
+
+---
+
+## 📁 Estructura del proyecto en el host
+
+El proyecto debe ubicarse en el host de la Raspberry Pi en la siguiente ruta:
+
+```
+/opt/command-vault/
+├── client/
+├── server/
+│   └── data/
+│       └── command-vault.db
+├── package.json
+├── package-lock.json
+└── docker-compose.yml
+```
+> ⚠️ La carpeta server/data/ es crítica, ya que contiene la base de datos SQLite y debe ser persistente.
+
+---
+
+## 🐳 Docker Compose (Portainer Stack)
+
+Este es el `docker-compose.yml` funcional utilizado para el despliegue:
+
+```yaml
+version: "3.9"
+
+services:
+  command-vault:
+    image: node:20.20.0-bullseye
+    container_name: command-vault
+    restart: unless-stopped
+
+    working_dir: /app
+
+    environment:
+      NODE_ENV: development
+      DB_PATH: /app/server/data/command-vault.db
+
+    ports:
+      - "600:5173"   # Frontend (Vite)
+      - "5179:5179"  # Backend API
+
+    volumes:
+      # Código fuente (persistente)
+      - /opt/command-vault/server:/app/server
+      - /opt/command-vault/client:/app/client
+      - /opt/command-vault/package.json:/app/package.json
+      - /opt/command-vault/package-lock.json:/app/package-lock.json
+
+      # Base de datos persistente
+      - /opt/command-vault/server/data:/app/server/data
+
+    command: >
+      sh -c "
+        npm install &&
+        npm run dev
+      "
+```
+---
+
+## ▶️ Despliegue desde Portainer
+
+1. Accede a Portainer
+2. Ve a Stacks
+3. Crea un nuevo Stack
+4. Pega el contenido del `docker-compose.yml`
+5. Asigna un nombre (por ejemplo: `command-vault`)
+6. Pulsa Deploy the stack
+
+Portainer descargará la imagen, instalará dependencias y lanzará el frontend y backend automáticamente.
+
+---
+
+## 🌐 Acceso a la aplicación
+
+> NOTA IMPORTANTE!
+> Para que se pueda acceder de forma externa hay que añadirle en el archivo `command-vault/client/vite.config.ts` una linea `host: true` para que pueda tener acceso desde fuera (`0.0.0.0`)
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    host: true,          // 👈 AÑADIR ESTO DE AQUÍ
+    port: 5173,
+    proxy: {
+      "/api": "http://localhost:5179"
+    }
+  }
+});
+```
+
+Una vez desplegado:
+
+- Frontend Web:
+
+```
+http://<IP_DE_LA_RASPBERRY>:600
+```
+
+- Backend API:
+
+```
+http://<IP_DE_LA_RASPBERRY>:5179
+```
+
+La aplicación se ejecuta completamente en local desde el navegador, sin necesidad de Electron ni binarios adicionales.
+
+---
+
+## 💾 Persistencia y reinicios
+
+- La base de datos SQLite se guarda en:
+
+```
+/opt/command-vault/server/data/
+```
+
+- Los cambios en código (`.ts`, `.tsx`, etc.) son persistentes
+- El contenedor puede reiniciarse sin pérdida de datos
+- Ideal tanto para uso diario como para desarrollo activo
+
+---
+
 ## 🔐 Seguridad
 
 - No se conecta a internet
