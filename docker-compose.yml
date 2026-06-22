@@ -1,0 +1,30 @@
+services:
+  command-vault:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: command-vault:2.0.0
+    container_name: command-vault
+    restart: unless-stopped
+    ports:
+      - "5179:5179"
+    volumes:
+      # Persistencia de la base de datos SQLite (workspaces, secciones, comandos, historial)
+      - command-vault-data:/app/server/data
+    environment:
+      NODE_ENV: production
+      PORT: 5179
+      DB_PATH: /app/server/data/command-vault.db
+      # Para desactivar el seed inicial de 258 comandos (por ejemplo, en un reinicio
+      # con un volumen ya migrado desde otra instancia), descomenta la línea siguiente:
+      # DISABLE_SEED: "true"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5179/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  command-vault-data:
+    name: command-vault-data

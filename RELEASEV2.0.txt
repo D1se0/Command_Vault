@@ -1,0 +1,199 @@
+# 🚀 RELEASE v2.0
+
+La Release v2.0 de Command Vault marca un salto enorme respecto a la v0.3.0-beta: pasa de ser un prototipo funcional a una auténtica base de conocimiento técnica de pentesting, red teaming y administración de sistemas, lista para instalarse en cualquier sistema operativo con un solo comando.
+
+---
+
+## 🗄️ Base de datos de comandos: de 6 a 258 comandos reales
+
+La beta incluía un puñado de comandos de ejemplo. La v2.0 incorpora una base de datos curada y lista para usar desde el primer arranque:
+
+- **258 comandos** repartidos en **17 secciones temáticas**:
+  Reconocimiento & OSINT · Escaneo de Red · Web (Enumeración & Fuzzing, SQL Injection, XSS & Client-Side, LFI/RFI/SSRF/XXE) · Active Directory · Privilege Escalation (Linux y Windows) · Explotación & Reverse Shells · Post-Explotación · Cracking de Contraseñas · Wireless Hacking · Cloud Security (AWS/Azure/GCP) · Mobile Security · Forense & Esteganografía · Sysadmin & Utilidades.
+- Cada comando incluye **título, explicación, lenguaje, tags, nivel de riesgo y, cuando aplica, una URL de referencia externa** (OWASP, GTFOBins, repositorios oficiales de herramientas, etc.).
+- La base de datos se carga automáticamente la primera vez que arrancas Command Vault, en un workspace llamado "Pentest Workspace". Si ya tienes datos, no se sobrescribe nada.
+- **Pensada para crecer**: el seed se genera desde `server/data/seed/build_seed.py`, un script Python documentado y estructurado por secciones. Añadir tus propios comandos en bloque es tan simple como seguir el mismo patrón y ejecutar `npm run seed:rebuild`.
+
+---
+
+## 🔍 Búsqueda avanzada de comandos
+
+- Búsqueda en tiempo real dentro de la sección activa, igual que en la beta.
+- **Nueva búsqueda global**: un botón "Buscar todo" consulta todos los comandos del workspace activo de una vez, sin importar en qué sección estén, directamente contra la base de datos (no solo en el cliente).
+- Sigue funcionando por título, descripción, contenido del comando, lenguaje y tags combinados.
+
+---
+
+## ⭐ Sistema de Favoritos (nuevo)
+
+- Cualquier comando puede marcarse como favorito con un clic.
+- Vista dedicada "Favoritos" en la barra lateral, accesible desde cualquier sección.
+- Útil para tener siempre a mano tus payloads y comandos "golden" sin tener que recordar en qué sección están guardados.
+
+---
+
+## 🚦 Niveles de riesgo (nuevo)
+
+- Cada comando puede clasificarse como `info`, `bajo`, `medio`, `alto` o `crítico`.
+- Badge visual de color en cada tarjeta de comando.
+- Filtro dedicado por nivel de riesgo, combinable con tags y búsqueda.
+- Todos los 258 comandos de la base de datos inicial vienen ya clasificados.
+
+---
+
+## 🏷️ Sistema de Tags
+
+Se mantiene y se refina respecto a la beta:
+
+- Clasifica comandos por técnica, tecnología o fase del ataque.
+- Filtra por uno o varios tags combinados con el nivel de riesgo y la búsqueda activa.
+- Los tags ahora se normalizan automáticamente (sin duplicados, minúsculas) tanto al crear como al editar un comando.
+
+---
+
+## 🕒 Versionado de comandos
+
+Funcionalidad ya presente en la beta, pulida en esta versión:
+
+- Cada actualización de un comando guarda una versión histórica sin sobrescribir el comando principal.
+- Previsualización de versiones anteriores sin afectar al comando activo.
+- Marcar una versión como pineada (preferida) o quitar el pin.
+- Eliminar versiones antiguas que ya no se necesiten.
+- Ahora también disponible desde la vista de Favoritos y de Búsqueda global, no solo dentro de una sección.
+
+---
+
+## 📋 Copiar comandos con un clic + contador de uso (nuevo)
+
+- Botón de copiado directo al portapapeles, respetando la versión seleccionada del historial.
+- **Nuevo**: cada copia incrementa un contador de uso visible en la tarjeta del comando, para detectar de un vistazo cuáles son tus comandos más utilizados.
+
+---
+
+## 🎨 Expansión masiva de iconos
+
+La beta incluía unos 75 iconos. La v2.0 amplía la colección a **más de 130 iconos**, con nuevas categorías:
+
+- OS específicos: Windows, Linux.
+- Explotación: exploit, bomb, worm, syringe, skull, crown.
+- Infraestructura: containers, Docker, Git, GitHub.
+- OSINT: telescope, satellite, satellite dish, user search, building.
+- Pivoting y movimiento lateral: waypoints, link, unlink.
+- Ingeniería social: brain, mail, at-sign.
+- Forense: microscope, flask, test tube.
+- Interfaz: settings, sliders, login/logout, exportar/importar, archivo, filtros, ordenar.
+- Selector de iconos ahora con **buscador en tiempo real** dentro del editor de secciones.
+
+---
+
+## 💾 Exportación e importación (nuevo)
+
+- **Backup completo en JSON**: exporta de un clic todos tus workspaces, secciones, comandos e historial de versiones.
+- **Importación segura**: al importar un backup, siempre se crea un workspace nuevo — nunca se sobrescriben datos existentes.
+- **Exportar sección a Markdown**: genera un cheatsheet `.md` de cualquier sección individual, listo para compartir, imprimir o subir a un repositorio de notas.
+
+---
+
+## 🔐 Autenticación local opcional (nuevo)
+
+- Command Vault sigue funcionando sin login por defecto, igual que antes.
+- Si vas a exponer tu instancia en la red local (LAN), puedes activar una contraseña desde **Ajustes → Acceso con contraseña**.
+- Implementada con sesiones de servidor y hashing `scrypt` nativo de Node.js (sin dependencias externas de criptografía).
+- Protege automáticamente todas las rutas de la API salvo el propio login mientras esté activada.
+
+---
+
+## 🛠️ Instalación multiplataforma automatizada (nuevo)
+
+La beta solo incluía un `install.bat` básico para Windows. La v2.0 soporta instalación nativa completa en **Windows, Linux y macOS**, además de Docker:
+
+### Linux / macOS — `install.sh`
+- Detecta automáticamente la distribución y el gestor de paquetes (apt, dnf, yum, pacman, zypper, apk, Homebrew).
+- Instala Node.js 20 LTS si no está presente o es demasiado antiguo.
+- Instala automáticamente las herramientas de compilación necesarias para SQLite nativo.
+- Compila cliente y servidor.
+- **En Linux, ofrece instalar Command Vault como servicio systemd** de forma interactiva.
+
+### Windows — `install.ps1` (con `install.bat` de conveniencia)
+- Detecta Node.js e intenta instalarlo automáticamente vía `winget`, `Chocolatey` o el instalador oficial MSI.
+- Compila cliente y servidor.
+- Ofrece registrar Command Vault como **Tarea Programada de Windows** para arranque automático al iniciar sesión.
+
+### Docker / Docker Compose
+- `Dockerfile` multi-stage (build de cliente, build de servidor, imagen final mínima).
+- `docker-compose.yml` listo para `docker compose up -d --build`, con persistencia de datos en volumen y healthcheck incorporado.
+- Funciona de forma idéntica en cualquier sistema operativo con Docker.
+
+---
+
+## ⚙️ Servicio systemd con gestión completa (nuevo)
+
+Tal y como se pedía: en Linux, Command Vault puede desplegarse como un servicio real del sistema:
+
+```
+sudo systemctl status   command-vault
+sudo systemctl start    command-vault
+sudo systemctl stop     command-vault
+sudo systemctl restart  command-vault
+sudo systemctl enable   command-vault
+sudo systemctl disable  command-vault
+journalctl -u command-vault -f
+```
+
+- Arranque automático al reiniciar el servidor (`enable`).
+- Reinicio automático ante fallos (`Restart=on-failure`).
+- Hardening básico del unit file (`NoNewPrivileges`, `ProtectSystem`, `PrivateTmp`).
+- Script de ayuda `scripts/command-vault-ctl.sh` para no tener que recordar la sintaxis de systemctl.
+- Script de desinstalación del servicio incluido (`scripts/uninstall-systemd-service.sh`), que no toca el proyecto ni la base de datos.
+
+---
+
+## 🧱 Backend: nuevas rutas y mejoras de robustez
+
+- Nuevas rutas: `/api/commands/search/global`, `/api/commands/favorites`, `/api/commands/:id/favorite`, `/api/commands/:id/use`, `/api/data/export`, `/api/data/import`, `/api/data/export/section/:id/markdown`, `/api/auth/*`.
+- Reordenación de secciones y comandos vía API (`/reorder`), usada por las flechas ↑/↓ de la barra lateral.
+- Workspaces y secciones ahora devuelven conteos (`section_count`, `command_count`) para que la interfaz los muestre sin peticiones adicionales.
+- **Manejador de errores global**: cualquier error de validación ahora devuelve un JSON limpio en lugar de una página de error HTML o un cuelgue del proceso.
+- Migraciones de base de datos ampliadas y versionadas (de 2 a 3 niveles), totalmente retrocompatibles con bases de datos creadas en la v0.3.0-beta.
+
+---
+
+## 🗂️ Mejoras generales de la interfaz
+
+- Barra lateral con contador de comandos por sección y reordenación con flechas ↑/↓.
+- Panel de Ajustes centralizado (autenticación + backups) en lugar de funcionalidad dispersa.
+- Mensajes de la interfaz totalmente en español.
+- Manejo de errores más informativo en toda la aplicación (se muestra el motivo real devuelto por el servidor, no un genérico "error desconocido").
+- Componentes reorganizados (`CommandCard`, `RiskBadge`, `Login`, `SettingsPanel`) para un código más mantenible de cara a futuras ampliaciones.
+
+---
+
+## 💾 Persistencia y almacenamiento local
+
+- Los datos se siguen almacenando en SQLite, igual que en la beta.
+- Persistencia total mediante volumen Docker o carpeta `server/data/` en instalación nativa.
+- Compatible con Raspberry Pi y entornos ARM.
+- Ideal para uso offline y laboratorios locales.
+
+---
+
+## 🧠 Filosofía de la v2.0
+
+Command Vault v2.0 no es solo un gestor de comandos:
+
+- Es una memoria técnica personal.
+- Un vault de conocimiento ofensivo y defensivo.
+- Diseñado por y para hackers éticos — y ahora, instalable por cualquiera, en cualquier sistema, en minutos.
+
+---
+
+## 🔮 Próximos pasos
+
+La arquitectura de esta versión deja preparado el terreno para:
+
+- Plantillas de ataque reutilizables (con variables sustituibles, ej. `<IP>`, `<DOMAIN>`).
+- Cifrado opcional del vault en reposo.
+- Sincronización entre múltiples instancias (equipo de pentest compartiendo workspace).
+- Roles de usuario más allá de la contraseña única (multi-usuario con permisos).
+
+---
